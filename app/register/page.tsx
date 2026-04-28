@@ -1,13 +1,17 @@
 "use client"
 
-import PasswordInput from "@/app/login/components/PasswordInput";
 import EmailInput from "@/app/login/components/EmailInput";
+import PasswordInput from "@/app/login/components/PasswordInput";
 import {useState} from "react";
 
-export default function LoginPage () {
+export default function Register () {
     const [email, setEmail] = useState("");
-    const [isValid, setValid] = useState(true);
+    const [validEmail, setValidEmail] = useState(true);
+
     const [password, setPassword] = useState("");
+    const [validPassoword, setValidPassoword] = useState(true);
+
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const clean = (str: string) => str.replace(/\s/g, "");
 
@@ -17,14 +21,23 @@ export default function LoginPage () {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
         if(!emailRegex.test(value)) {
-            setValid(false);
+            setValidEmail(false);
         } else {
-            setValid(true);
+            setValidEmail(true);
         }
     }
 
-    const verifyPassword = (value: string) => {
+    const cleanPassword = (value: string) => {
         setPassword(clean(value));
+    }
+
+    const verifyPassword = (value: string) => {
+        setConfirmPassword(clean(value));
+
+        if(value !== password) {
+            setValidPassoword(false);
+        } else
+            setValidPassoword(true);
     }
 
     return (
@@ -39,12 +52,16 @@ export default function LoginPage () {
 
                 <form className="space-y-5">
                     <div>
-                        <EmailInput value={email} onChange={verifyEmail} />
-                        {isValid ? null : <a className={`text-red-500`}>email invalid</a>}
+                        <EmailInput value={email} onChange={verifyEmail}/>
+                        {validEmail ? null : <a className={`text-red-500`}>email nie jest poprawny</a>}
                     </div>
 
                     <div>
-                        <PasswordInput value={password} onChange={verifyPassword}/>
+                        <PasswordInput value={password} onChange={cleanPassword}/>
+                    </div>
+                    <div>
+                        <PasswordInput placeholder={"powtórz hasło"} value={confirmPassword} onChange={verifyPassword}/>
+                        {validPassoword ? null : <a className={`text-red-500`}>hasła nie są takie same</a>}
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
@@ -70,7 +87,7 @@ export default function LoginPage () {
                 </form>
 
                 <div className="my-6 flex items-center gap-4">
-                    <div className="h-px flex-1 bg-slate-800"/>
+                <div className="h-px flex-1 bg-slate-800"/>
                     <span className="text-sm text-slate-500">lub</span>
                     <div className="h-px flex-1 bg-slate-800"/>
                 </div>
@@ -81,28 +98,12 @@ export default function LoginPage () {
                 </button>
 
                 <p className="mt-6 text-center text-sm text-slate-400">
-                    Nie masz konta?{' '}
-                    <a href="/register" className="font-medium text-blue-400 hover:text-blue-300">
-                        Zarejestruj się
+                    Masz konto?{' '}
+                    <a href="/login" className="font-medium text-blue-400 hover:text-blue-300">
+                        Zaloguj się
                     </a>
                 </p>
             </div>
         </main>
     );
 }
-
-
-/*
-<main className="min-h-screen flex flex-col items-center justify-center px-4">
-            <form className="flex flex-col items-left justify-center bg-secondary rounded-lg shadow-md p-2 gap-4 w-full max-w-min">
-                <div className="flex flex-col justify-center items-center w-full">
-                    <h1 className="text-gray-400">
-                        Login
-                    </h1>
-                    <a>Witaj ponownie</a>
-                </div>
-                <EmailInput/>
-                <PasswordInput/>
-            </form>
-        </main>
- */
