@@ -3,6 +3,7 @@
 import EmailInput from "@/app/login/components/EmailInput";
 import PasswordInput from "@/app/login/components/PasswordInput";
 import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 export default function Register () {
     const [email, setEmail] = useState("");
@@ -12,6 +13,8 @@ export default function Register () {
     const [validPassoword, setValidPassoword] = useState(true);
 
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const router = useRouter();
 
     const clean = (str: string) => str.replace(/\s/g, "");
 
@@ -38,6 +41,10 @@ export default function Register () {
             setValidPassoword(false);
         } else
             setValidPassoword(true);
+    }
+
+    const login = () => {
+        router.push("/login");
     }
 
     return (
@@ -81,6 +88,7 @@ export default function Register () {
                     <button
                         type="submit"
                         className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+                        onClick={login}
                     >
                         Zaloguj się
                     </button>
